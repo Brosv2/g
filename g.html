@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Game Hub 2.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+    font-family: Arial;
+    background:white;
+    color:black;
+    text-align:center;
+}
+a{
+    display:inline-block;
+    margin:5px;
+    padding:8px 12px;
+    border:1px solid black;
+    text-decoration:none;
+    color:black;
+}
+table{
+    margin:auto;
+    border-collapse:collapse;
+}
+td{
+    border:1px solid black;
+    padding:15px;
+    font-size:18px;
+}
+hr{margin:30px 0;}
+.small{font-size:14px;}
+</style>
+</head>
+
+<body>
+
+<h1>🎮 GAME HUB 2.0</h1>
+
+<a href="#tic">Tic Tac Toe</a>
+<a href="#memory">Memory</a>
+<a href="#maze">Maze</a>
+<a href="#quiz">Quiz</a>
+<a href="#story">Story</a>
+<a href="#mines">Minesweeper</a>
+
+<hr>
+
+<!-- TIC TAC TOE -->
+<h2 id="tic">Tic Tac Toe</h2>
+<p class="small">Play with a friend. Use this grid visually.</p>
+<table>
+<tr><td>X</td><td>O</td><td>X</td></tr>
+<tr><td>O</td><td>X</td><td>O</td></tr>
+<tr><td>X</td><td>O</td><td>X</td></tr>
+</table>
+<a href="#">Back to Top</a>
+
+<hr>
+
+<!-- MEMORY -->
+<h2 id="memory">Memory Match</h2>
+<p class="small">Remember positions.</p>
+<table>
+<tr><td>★</td><td>♣</td><td>★</td></tr>
+<tr><td>♠</td><td>♣</td><td>♠</td></tr>
+</table>
+<a href="#">Back to Top</a>
+
+<hr>
+
+<!-- MAZE -->
+<h2 id="maze">Mini Maze</h2>
+<p>You are at the entrance.</p>
+<a href="#left">Go Left</a>
+<a href="#right">Go Right</a>
+
+<h3 id="left">🏆 Treasure Found!</h3>
+<a href="#maze">Restart</a>
+
+<h3 id="right">Dead End 😢</h3>
+<a href="#maze">Restart</a>
+
+<hr>
+
+<!-- QUIZ -->
+<h2 id="quiz">Quick Quiz</h2>
+<p>12 ÷ 3 = ?</p>
+<a href="#wrong">3</a>
+<a href="#correct">4</a>
+<a href="#wrong">5</a>
+
+<h3 id="correct">Correct! 🎉</h3>
+<h3 id="wrong">Wrong! Try Again.</h3>
+<a href="#quiz">Back</a>
+
+<hr>
+
+<!-- STORY -->
+<h2 id="story">Adventure</h2>
+<p>You see a castle.</p>
+<a href="#enter">Enter</a>
+<a href="#run">Run Away</a>
+
+<h3 id="enter">A knight greets you ⚔️</h3>
+<a href="#story">Restart</a>
+
+<h3 id="run">You escape safely 🏃</h3>
+<a href="#story">Restart</a>
+
+<hr>
+
+<!-- MINESWEEPER 5x5 -->
+<h2 id="mines">💣 Minesweeper (5x5)</h2>
+<p class="small">Avoid mines. Tap a square.</p>
+
+<table>
+<tr>
+<td><a href="#s1">?</a></td>
+<td><a href="#s2">?</a></td>
+<td><a href="#m">?</a></td>
+<td><a href="#s3">?</a></td>
+<td><a href="#s4">?</a></td>
+</tr>
+<tr>
+<td><a href="#s5">?</a></td>
+<td><a href="#m">?</a></td>
+<td><a href="#s6">?</a></td>
+<td><a href="#s7">?</a></td>
+<td><a href="#s8">?</a></td>
+</tr>
+<tr>
+<td><a href="#s9">?</a></td>
+<td><a href="#s10">?</a></td>
+<td><a href="#s11">?</a></td>
+<td><a href="#m">?</a></td>
+<td><a href="#s12">?</a></td>
+</tr>
+<tr>
+<td><a href="#m">?</a></td>
+<td><a href="#s13">?</a></td>
+<td><a href="#s14">?</a></td>
+<td><a href="#s15">?</a></td>
+<td><a href="#s16">?</a></td>
+</tr>
+<tr>
+<td><a href="#s17">?</a></td>
+<td><a href="#s18">?</a></td>
+<td><a href="#m">?</a></td>
+<td><a href="#s19">?</a></td>
+<td><a href="#s20">?</a></td>
+</tr>
+</table>
+
+<h3 id="m">💥 BOOM! You hit a mine!</h3>
+<a href="#mines">Restart Minesweeper</a>
+
+<h3 id="s1">1</h3>
+<h3 id="s2">1</h3>
+<h3 id="s3">2</h3>
+<h3 id="s4">1</h3>
+<h3 id="s5">1</h3>
+<h3 id="s6">2</h3>
+<h3 id="s7">2</h3>
+<h3 id="s8">1</h3>
+<h3 id="s9">0</h3>
+<h3 id="s10">1</h3>
+<h3 id="s11">2</h3>
+<h3 id="s12">1</h3>
+<h3 id="s13">1</h3>
+<h3 id="s14">1</h3>
+<h3 id="s15">1</h3>
+<h3 id="s16">0</h3>
+<h3 id="s17">0</h3>
+<h3 id="s18">1</h3>
+<h3 id="s19">1</h3>
+<h3 id="s20">0</h3>
+
+<a href="#mines">Play Again</a>
+
+<hr>
+<p class="small">Optimized for Kindle Paperwhite Browser</p>
+
+</body>
+</html>
