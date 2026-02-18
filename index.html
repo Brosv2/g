@@ -1,184 +1,376 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Game Hub 2.0</title>
+<meta charset="UTF-8">
+<title>GameHub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{
-    font-family: Arial;
-    background:white;
-    color:black;
-    text-align:center;
-}
-a{
-    display:inline-block;
-    margin:5px;
-    padding:8px 12px;
-    border:1px solid black;
-    text-decoration:none;
-    color:black;
-}
-table{
-    margin:auto;
-    border-collapse:collapse;
-}
-td{
-    border:1px solid black;
-    padding:15px;
-    font-size:18px;
-}
-hr{margin:30px 0;}
-.small{font-size:14px;}
+body{margin:0;font-family:Arial;background:#000;color:#fff;text-align:center}
+.header{padding:15px;border-bottom:1px solid #222}
+.menu{padding:20px}
+.app-btn{display:block;background:#111;margin:10px auto;padding:15px;width:80%;border:1px solid #222}
+.game{display:none;padding:10px}
+.cell{width:20px;height:20px;display:inline-block;border:1px solid #111;font-size:14px;line-height:20px}
+button{background:#111;color:#fff;border:1px solid #222;padding:6px 12px;margin:4px}
+.ctrl{display:inline-block;width:40px;padding:6px;margin:3px;border:1px solid #222}
+.score,.over{margin:6px}
 </style>
 </head>
-
 <body>
 
-<h1>🎮 GAME HUB 2.0</h1>
+<div class="header">GameHub</div>
 
-<a href="#tic">Tic Tac Toe</a>
-<a href="#memory">Memory</a>
-<a href="#maze">Maze</a>
-<a href="#quiz">Quiz</a>
-<a href="#story">Story</a>
-<a href="#mines">Minesweeper</a>
+<div id="home" class="menu">
+<div class="app-btn" onclick="openGame('tic')">Tic Tac Toe</div>
+<div class="app-btn" onclick="openGame('snake')">Snake</div>
+<div class="app-btn" onclick="openGame('tetris')">Tetris</div>
+<div class="app-btn" onclick="openGame('mine')">Minesweeper</div>
+</div>
 
-<hr>
+<script>
+function openGame(id){
+document.getElementById("home").style.display="none";
+document.getElementById(id).style.display="block";
+}
+function goHome(){
+var g=["tic","snake","tetris","mine"];
+for(var i=0;i<g.length;i++)document.getElementById(g[i]).style.display="none";
+document.getElementById("home").style.display="block";
+}
+</script>
 
-<!-- TIC TAC TOE -->
-<h2 id="tic">Tic Tac Toe</h2>
-<p class="small">Play with a friend. Use this grid visually.</p>
-<table>
-<tr><td>X</td><td>O</td><td>X</td></tr>
-<tr><td>O</td><td>X</td><td>O</td></tr>
-<tr><td>X</td><td>O</td><td>X</td></tr>
-</table>
-<a href="#">Back to Top</a>
+<!-- ================= TIC TAC TOE ================= -->
 
-<hr>
+<div id="tic" class="game">
+<h3>Tic Tac Toe</h3>
+<div id="ticBoard"></div>
+<div id="ticStatus"></div>
+<button onclick="restartTic()">Restart</button>
+<button onclick="goHome()">Back</button>
+</div>
 
-<!-- MEMORY -->
-<h2 id="memory">Memory Match</h2>
-<p class="small">Remember positions.</p>
-<table>
-<tr><td>★</td><td>♣</td><td>★</td></tr>
-<tr><td>♠</td><td>♣</td><td>♠</td></tr>
-</table>
-<a href="#">Back to Top</a>
+<script>
+var tBoard,tPlayer,tOver;
+function initTic(){tBoard=["","","","","","","","",""];tPlayer="X";tOver=false;document.getElementById("ticStatus").innerHTML="";}
+function drawTic(){
+var h="";
+for(var i=0;i<9;i++){
+h+="<div class='cell' style='width:60px;height:60px;line-height:60px;font-size:22px' onclick='ticMove("+i+")'>"+tBoard[i]+"</div>";
+if((i+1)%3==0)h+="<br>";
+}
+document.getElementById("ticBoard").innerHTML=h;
+}
+function ticMove(i){
+if(tBoard[i]==""&&!tOver){
+tBoard[i]=tPlayer;
+checkTic();
+tPlayer=(tPlayer=="X")?"O":"X";
+drawTic();
+}}
+function checkTic(){
+var w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+for(var i=0;i<w.length;i++){
+var a=w[i][0],b=w[i][1],c=w[i][2];
+if(tBoard[a]&&tBoard[a]==tBoard[b]&&tBoard[a]==tBoard[c]){
+document.getElementById("ticStatus").innerHTML="Winner: "+tBoard[a];
+tOver=true;
+}}}
+function restartTic(){initTic();drawTic();}
+initTic();drawTic();
+</script>
 
-<hr>
+<!-- ================= SNAKE ================= -->
 
-<!-- MAZE -->
-<h2 id="maze">Mini Maze</h2>
-<p>You are at the entrance.</p>
-<a href="#left">Go Left</a>
-<a href="#right">Go Right</a>
+<div id="snake" class="game">
+<h3>Snake</h3>
+<div class="score" id="snakeScore"></div>
+<div id="snakeBoard"></div>
+<div class="over" id="snakeOver"></div>
 
-<h3 id="left">🏆 Treasure Found!</h3>
-<a href="#maze">Restart</a>
+<div>
+<div class="ctrl" onclick="dir='up'">▲</div><br>
+<div class="ctrl" onclick="dir='left'">◄</div>
+<div class="ctrl" onclick="dir='right'">►</div><br>
+<div class="ctrl" onclick="dir='down'">▼</div>
+</div>
 
-<h3 id="right">Dead End 😢</h3>
-<a href="#maze">Restart</a>
+<button onclick="restartSnake()">Restart</button>
+<button onclick="goHome()">Back</button>
+</div>
 
-<hr>
+<script>
+var size=12,snake,dir,food,sScore,sOver;
+function initSnake(){
+snake=[[5,5]];
+dir="right";
+food=[2,2];
+sScore=0;
+sOver=false;
+document.getElementById("snakeOver").innerHTML="";
+}
+function drawSnake(){
+var h="";
+for(var y=0;y<size;y++){
+for(var x=0;x<size;x++){
+var t="";
+for(var i=0;i<snake.length;i++)
+if(snake[i][0]==x&&snake[i][1]==y)t="■";
+if(food[0]==x&&food[1]==y)t="●";
+h+="<div class='cell'>"+t+"</div>";
+}
+h+="<br>";
+}
+document.getElementById("snakeBoard").innerHTML=h;
+document.getElementById("snakeScore").innerHTML="Score: "+sScore;
+}
+function moveSnake(){
+if(sOver)return;
+var h=[snake[0][0],snake[0][1]];
+if(dir=="right")h[0]++;if(dir=="left")h[0]--;
+if(dir=="up")h[1]--;if(dir=="down")h[1]++;
+if(h[0]<0||h[0]>=size||h[1]<0||h[1]>=size){endSnake();return;}
+for(var i=0;i<snake.length;i++)
+if(snake[i][0]==h[0]&&snake[i][1]==h[1]){endSnake();return;}
+snake.unshift(h);
+if(h[0]==food[0]&&h[1]==food[1]){
+sScore++;
+food=[Math.floor(Math.random()*size),Math.floor(Math.random()*size)];
+}else snake.pop();
+drawSnake();
+}
+function endSnake(){sOver=true;document.getElementById("snakeOver").innerHTML="Game Over";}
+function restartSnake(){initSnake();drawSnake();}
+initSnake();drawSnake();
+setInterval(moveSnake,300);
+</script>
 
-<!-- QUIZ -->
-<h2 id="quiz">Quick Quiz</h2>
-<p>12 ÷ 3 = ?</p>
-<a href="#wrong">3</a>
-<a href="#correct">4</a>
-<a href="#wrong">5</a>
+<!-- ================= TETRIS ================= -->
 
-<h3 id="correct">Correct! 🎉</h3>
-<h3 id="wrong">Wrong! Try Again.</h3>
-<a href="#quiz">Back</a>
+<div id="tetris" class="game">
+<h3>Tetris</h3>
+<div class="score" id="tScore"></div>
+<div id="tBoard"></div>
+<div class="over" id="tOver"></div>
+<button onclick="rotate()">Rotate</button>
+<button onclick="togglePause()">Pause</button>
+<button onclick="restartTetris()">Restart</button>
+<button onclick="goHome()">Back</button>
+</div>
 
-<hr>
+<script>
+var w=8,h=12,board,current,tScore,tOverFlag,tPaused=false,dropSpeed=600,interval;
 
-<!-- STORY -->
-<h2 id="story">Adventure</h2>
-<p>You see a castle.</p>
-<a href="#enter">Enter</a>
-<a href="#run">Run Away</a>
+var shapes=[
+[[1,1,1,1]],
+[[1,1],[1,1]],
+[[0,1,0],[1,1,1]],
+[[1,1,0],[0,1,1]],
+[[0,1,1],[1,1,0]]
+];
 
-<h3 id="enter">A knight greets you ⚔️</h3>
-<a href="#story">Restart</a>
+function initTetris(){
+board=[];
+for(var y=0;y<h;y++){board[y]=[];for(var x=0;x<w;x++)board[y][x]=0;}
+tScore=0;tOverFlag=false;tPaused=false;dropSpeed=600;
+spawn();
+document.getElementById("tOver").innerHTML="";
+if(interval)clearInterval(interval);
+interval=setInterval(drop,dropSpeed);
+}
 
-<h3 id="run">You escape safely 🏃</h3>
-<a href="#story">Restart</a>
+function spawn(){
+var s=JSON.parse(JSON.stringify(shapes[Math.floor(Math.random()*shapes.length)]));
+current={shape:s,x:3,y:0};
+}
 
-<hr>
+function rotate(){
+if(tPaused||tOverFlag)return;
+var n=[];
+for(var x=0;x<current.shape[0].length;x++){
+n[x]=[];
+for(var y=current.shape.length-1;y>=0;y--)n[x].push(current.shape[y][x]);
+}
+var old=current.shape;
+current.shape=n;
+if(collision(current.x,current.y))current.shape=old;
+drawTetris();
+}
 
-<!-- MINESWEEPER 5x5 -->
-<h2 id="mines">💣 Minesweeper (5x5)</h2>
-<p class="small">Avoid mines. Tap a square.</p>
+function collision(nx,ny){
+for(var y=0;y<current.shape.length;y++){
+for(var x=0;x<current.shape[0].length;x++){
+if(current.shape[y][x]){
+var px=nx+x,py=ny+y;
+if(px<0||px>=w||py>=h||board[py][px])return true;
+}}}
+return false;
+}
 
-<table>
-<tr>
-<td><a href="#s1">?</a></td>
-<td><a href="#s2">?</a></td>
-<td><a href="#m">?</a></td>
-<td><a href="#s3">?</a></td>
-<td><a href="#s4">?</a></td>
-</tr>
-<tr>
-<td><a href="#s5">?</a></td>
-<td><a href="#m">?</a></td>
-<td><a href="#s6">?</a></td>
-<td><a href="#s7">?</a></td>
-<td><a href="#s8">?</a></td>
-</tr>
-<tr>
-<td><a href="#s9">?</a></td>
-<td><a href="#s10">?</a></td>
-<td><a href="#s11">?</a></td>
-<td><a href="#m">?</a></td>
-<td><a href="#s12">?</a></td>
-</tr>
-<tr>
-<td><a href="#m">?</a></td>
-<td><a href="#s13">?</a></td>
-<td><a href="#s14">?</a></td>
-<td><a href="#s15">?</a></td>
-<td><a href="#s16">?</a></td>
-</tr>
-<tr>
-<td><a href="#s17">?</a></td>
-<td><a href="#s18">?</a></td>
-<td><a href="#m">?</a></td>
-<td><a href="#s19">?</a></td>
-<td><a href="#s20">?</a></td>
-</tr>
-</table>
+function drop(){
+if(tPaused||tOverFlag)return;
+if(!collision(current.x,current.y+1)){
+current.y++;
+}else{
+for(var y=0;y<current.shape.length;y++)
+for(var x=0;x<current.shape[0].length;x++)
+if(current.shape[y][x])board[current.y+y][current.x+x]=1;
+clearLine();
+spawn();
+if(collision(current.x,current.y)){
+tOverFlag=true;
+document.getElementById("tOver").innerHTML="Game Over";
+}}
+drawTetris();
+}
 
-<h3 id="m">💥 BOOM! You hit a mine!</h3>
-<a href="#mines">Restart Minesweeper</a>
+function clearLine(){
+for(var y=0;y<h;y++){
+var full=true;
+for(var x=0;x<w;x++)if(!board[y][x])full=false;
+if(full){
+board.splice(y,1);
+var r=[];for(var i=0;i<w;i++)r.push(0);
+board.unshift(r);
+tScore++;
+if(tScore%3==0&&dropSpeed>200){
+dropSpeed-=50;
+clearInterval(interval);
+interval=setInterval(drop,dropSpeed);
+}}}}
 
-<h3 id="s1">1</h3>
-<h3 id="s2">1</h3>
-<h3 id="s3">2</h3>
-<h3 id="s4">1</h3>
-<h3 id="s5">1</h3>
-<h3 id="s6">2</h3>
-<h3 id="s7">2</h3>
-<h3 id="s8">1</h3>
-<h3 id="s9">0</h3>
-<h3 id="s10">1</h3>
-<h3 id="s11">2</h3>
-<h3 id="s12">1</h3>
-<h3 id="s13">1</h3>
-<h3 id="s14">1</h3>
-<h3 id="s15">1</h3>
-<h3 id="s16">0</h3>
-<h3 id="s17">0</h3>
-<h3 id="s18">1</h3>
-<h3 id="s19">1</h3>
-<h3 id="s20">0</h3>
+function drawTetris(){
+var htm="";
+for(var y=0;y<h;y++){
+for(var x=0;x<w;x++){
+var f=board[y][x];
+for(var sy=0;sy<current.shape.length;sy++)
+for(var sx=0;sx<current.shape[0].length;sx++)
+if(current.shape[sy][sx])
+if(current.y+sy==y&&current.x+sx==x)f=1;
+htm+="<div class='cell'>"+(f?"■":"")+"</div>";
+}
+htm+="<br>";
+}
+document.getElementById("tBoard").innerHTML=htm;
+document.getElementById("tScore").innerHTML="Score: "+tScore+(tPaused?" (Paused)":"");
+}
 
-<a href="#mines">Play Again</a>
+function togglePause(){tPaused=!tPaused;drawTetris();}
+function restartTetris(){initTetris();drawTetris();}
+initTetris();drawTetris();
+</script>
 
-<hr>
-<p class="small">Optimized for Kindle Paperwhite Browser</p>
+<!-- ================= MINESWEEPER ================= -->
+
+<div id="mine" class="game">
+<h3>Minesweeper</h3>
+<div id="mineBoard"></div>
+<div id="mineStatus"></div>
+<button onclick="restartMine()">Restart</button>
+<button onclick="goHome()">Back</button>
+</div>
+
+<script>
+var mSize=8,mines=10,mBoard,mOver;
+
+function initMine(){
+mBoard=[];
+for(var y=0;y<mSize;y++){
+mBoard[y]=[];
+for(var x=0;x<mSize;x++)
+mBoard[y][x]={mine:false,open:false,flag:false,count:0};
+}
+var placed=0;
+while(placed<mines){
+var x=Math.floor(Math.random()*mSize);
+var y=Math.floor(Math.random()*mSize);
+if(!mBoard[y][x].mine){
+mBoard[y][x].mine=true;
+placed++;
+}}
+countNumbers();
+mOver=false;
+document.getElementById("mineStatus").innerHTML="";
+}
+
+function countNumbers(){
+for(var y=0;y<mSize;y++)
+for(var x=0;x<mSize;x++){
+if(mBoard[y][x].mine)continue;
+var c=0;
+for(var dy=-1;dy<=1;dy++)
+for(var dx=-1;dx<=1;dx++){
+var nx=x+dx,ny=y+dy;
+if(nx>=0&&ny>=0&&nx<mSize&&ny<mSize)
+if(mBoard[ny][nx].mine)c++;
+}
+mBoard[y][x].count=c;
+}}
+
+function flood(x,y){
+var cell=mBoard[y][x];
+if(cell.open||cell.flag)return;
+cell.open=true;
+if(cell.count==0&&!cell.mine){
+for(var dy=-1;dy<=1;dy++)
+for(var dx=-1;dx<=1;dx++){
+var nx=x+dx,ny=y+dy;
+if(nx>=0&&ny>=0&&nx<mSize&&ny<mSize)
+flood(nx,ny);
+}}}
+
+function openCell(x,y){
+if(mOver)return;
+var cell=mBoard[y][x];
+if(cell.flag)return;
+if(cell.mine){
+cell.open=true;
+mOver=true;
+document.getElementById("mineStatus").innerHTML="Game Over";
+}else{
+flood(x,y);
+checkWin();
+}
+drawMine();
+}
+
+function flagCell(x,y){
+if(mOver)return;
+var cell=mBoard[y][x];
+if(!cell.open)cell.flag=!cell.flag;
+drawMine();
+}
+
+function checkWin(){
+var safe=0;
+for(var y=0;y<mSize;y++)
+for(var x=0;x<mSize;x++)
+if(!mBoard[y][x].mine&&mBoard[y][x].open)safe++;
+if(safe==mSize*mSize-mines){
+mOver=true;
+document.getElementById("mineStatus").innerHTML="You Win!";
+}}
+
+function drawMine(){
+var h="";
+for(var y=0;y<mSize;y++){
+for(var x=0;x<mSize;x++){
+var cell=mBoard[y][x];
+var t="";
+if(cell.open){
+if(cell.mine)t="X";
+else if(cell.count>0)t=cell.count;
+}else if(cell.flag)t="F";
+h+="<div class='cell' onclick='openCell("+x+","+y+")' ondblclick='flagCell("+x+","+y+")'>"+t+"</div>";
+}
+h+="<br>";
+}
+document.getElementById("mineBoard").innerHTML=h;
+}
+
+function restartMine(){initMine();drawMine();}
+initMine();drawMine();
+</script>
 
 </body>
 </html>
